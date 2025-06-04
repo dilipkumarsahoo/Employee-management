@@ -2,38 +2,79 @@ import { Component } from '@angular/core';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-
-
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import { EmployeeService } from '../../services/employee.service';
+import { MatIconModule } from '@angular/material/icon';
+import {MatSelectModule} from '@angular/material/select';
 export interface PeriodicElement {
   name: string;
-  position: number;
+  id: number;
   department: string;
   email: string;
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {"position": 1, "name": "Aarav Sharma", "department": "HR", "email": "aarav.sharma@example.com"},
-  {"position": 2, "name": "Diya Mehra", "department": "Finance", "email": "diya.mehra@example.com"},
-  {"position": 3, "name": "Vivaan Patel", "department": "Engineering", "email": "vivaan.patel@example.com"},
-  {"position": 4, "name": "Anaya Reddy", "department": "Marketing", "email": "anaya.reddy@example.com"},
-  {"position": 5, "name": "Kabir Nair", "department": "Sales", "email": "kabir.nair@example.com"},
-  {"position": 6, "name": "Ishita Deshmukh", "department": "Legal", "email": "ishita.deshmukh@example.com"},
-  {"position": 7, "name": "Reyansh Gupta", "department": "IT", "email": "reyansh.gupta@example.com"},
-  {"position": 8, "name": "Myra Joshi", "department": "Operations", "email": "myra.joshi@example.com"},
-  {"position": 9, "name": "Ayaan Khan", "department": "Support", "email": "ayaan.khan@example.com"},
-  {"position": 10, "name": "Saanvi Pillai", "department": "Admin", "email": "saanvi.pillai@example.com"}
-];
-
 @Component({
   selector: 'app-employee-list',
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatTableModule],
+  imports: [MatFormFieldModule, MatInputModule, MatTableModule,RouterModule,MatToolbarModule, MatIconModule, MatSelectModule],
   templateUrl: './employee-list.component.html',
   styleUrl: './employee-list.component.scss'
 })
 export class EmployeeListComponent {
-  displayedColumns: string[] = ['position', 'name', 'department', 'email'];
-  dataSource = new MatTableDataSource(ELEMENT_DATA);
+
+
+  displayedColumns: string[] = ['id', 'name', 'department', 'email', 'details'];
+  dataSource = new MatTableDataSource<PeriodicElement>();
+
+  
+
+  selectedDepartment: string = '';
+  departments: string[] = [];
+
+
+  constructor(private router: Router, private employeeService: EmployeeService) {}
+
+  ngOnInit() {
+    this.getEmployeesList();
+    this.getUniqueDepartments();
+  }
+
+  getEmployeesList(){
+    this.employeeService.getEmployees().subscribe(data => {
+      this.dataSource.data = data;
+    });
+  }
+
+  getUniqueDepartments() {
+    this.employeeService.getUniqueDepartments().subscribe(departments => {
+      this.departments = departments;
+      this.departments.unshift('All');
+    });
+  }
+
+  filterDeptPersons(arg0: any) {
+    console.log(arg0);
+    
+    this.employeeService.getEmployees().subscribe(data => {
+
+      if(arg0 === 'All'){
+        this.dataSource.data = data;
+        return;
+      }
+      data = data.filter((item: any) => {
+        return item.department.toString().toLowerCase() === arg0.toString().toLowerCase();
+      });
+      this.dataSource.data = data;
+    });
+
+}
+
+
+  goToDetails(id: number) {
+    console.log(id);
+    this.router.navigate(['/employees', id]);
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

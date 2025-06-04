@@ -1,8 +1,21 @@
-table {
+.full-width-table {
   width: 100%;
+  overflow-x: auto;
 }
 
-.mat-mdc-form-field {
-  font-size: 14px;
-  width: 100%;
+.mat-header-cell, .mat-cell {
+  padding: 12px;
+  text-align: left;
+}
+
+.mat-form-field {
+  min-width: 200px;
+}
+.hover-blue {
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+
+.hover-blue:hover {
+  color: greenyellow;
 }

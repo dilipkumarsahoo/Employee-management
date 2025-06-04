@@ -1,22 +1,23 @@
-<mat-card class="example-card" appearance="outlined">
-  <mat-card-header>
-    <div mat-card-avatar class="example-header-image"></div>
-    <mat-card-title>Name</mat-card-title>
-    <mat-card-subtitle>department</mat-card-subtitle>
-    <mat-card-subtitle>email</mat-card-subtitle>
-    <mat-card-subtitle>phone number</mat-card-subtitle>
-    <mat-card-subtitle> joining date</mat-card-subtitle>
-  </mat-card-header>
-  <img mat-card-image src="https://material.angular.dev/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-  <!-- <mat-card-content>
-    <p>
-      The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-      bred for hunting.
-    </p>
-  </mat-card-content>
-  <mat-card-actions>
-    <button matButton>LIKE</button>
-    <button matButton>SHARE</button>
-  </mat-card-actions> -->
-</mat-card>
+<mat-toolbar color="primary">
+  <span>Employee Details</span>
+</mat-toolbar>
+
+<div class="details-container">
+  <mat-card class="employee-card" appearance="outlined">
+    <mat-card-header>
+      <div mat-card-avatar class="avatar-placeholder"></div>
+      <mat-card-title>{{ employee?.name }}</mat-card-title>
+      <mat-card-subtitle>{{ employee?.department }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="detail-row"><strong>Email:</strong> {{ employee?.email }}</div>
+      <div class="detail-row"><strong>Phone:</strong> {{ employee?.phone }}</div>
+      <div class="detail-row"><strong>Joining Date:</strong> {{ employee?.joiningDate | date }}</div>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-raised-button color="accent" routerLink="/">Back to List</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
